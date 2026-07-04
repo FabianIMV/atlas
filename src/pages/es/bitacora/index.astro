@@ -32,7 +32,7 @@ const base = import.meta.env.BASE_URL;
               <span class="meta">
                 <BadgeEpistemico registro={entrada.data.registro} />
                 {entrada.data.capas.map((c) => (
-                  <CapaTag capa={c} />
+                  <CapaTag capa={c} enlace={false} />
                 ))}
                 <span class="mono semilla">semilla: {entrada.data.semilla}</span>
               </span>
