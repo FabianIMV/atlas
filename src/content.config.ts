@@ -38,13 +38,23 @@ const papers = defineCollection({
   schema: z.object({
     titulo: z.string(),
     autores: z.string(),
+    // fuente/url pueden estar pendientes de confirmar por el autor:
+    // el atlas no inventa citas (criterio de calidad nº 5).
     fuente: z.string(),
-    url: z.string().url(),
+    url: z.string().url().optional(),
     capas: z.array(capaId),
     registro: registroEnum,
     key_insight: z.string(),
-    lectura: z.enum(['completo', 'abstract/secundarias']), // honestidad de lectura
-    fecha_lectura: z.coerce.date(),
+    // Agrupación temática del índice (secciones de la Biblioteca inicial, doc 02)
+    tema: z.enum([
+      'Consciencia en IA',
+      'Neurociencia de la consciencia',
+      'Física / información',
+      'Teorías de consciencia',
+    ]),
+    // Honestidad de lectura: qué leyó realmente el autor.
+    lectura: z.enum(['completo', 'abstract/secundarias', 'por declarar']),
+    fecha_lectura: z.coerce.date().optional(),
   }),
 });
 
