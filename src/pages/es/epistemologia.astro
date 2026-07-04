@@ -1,6 +1,9 @@
 ---
 import Base from '../../layouts/Base.astro';
 import BadgeEpistemico from '../../components/BadgeEpistemico.astro';
+// Diagrama 3 pre-renderizado desde public/diagramas/diagrama-3-epistemologia.mmd
+// (mermaid-cli con tema del sistema; build-time, la opción más estable para Pages)
+import diagrama3 from '../../assets/diagrama-3-epistemologia.svg?raw';
 
 const registros = [
   {
@@ -105,7 +108,14 @@ const antipatrones = [
       (integración sobre acumulación) o <strong>bitácora en observación</strong>.
       Toda ficha integrada exige condición de falsación explícita.
     </p>
-    <!-- TODO Fase 2: renderizar aquí diagrama-3-epistemologia.mmd (pipeline completo, build-time) -->
+
+    <figure class="pipeline" aria-label="Pipeline epistemológico: de la idea a la integración al atlas, con salidas a cuarentena y bitácora en observación">
+      <div class="pipeline-svg" set:html={diagrama3} />
+      <figcaption class="mono">
+        El proceso de discernimiento es público: idea → registro → cruce con fuentes →
+        convergencia → frutos → integración, con salidas honestas a cuarentena y bitácora.
+      </figcaption>
+    </figure>
 
     <h2>Anti-patrones que el atlas evita</h2>
     <ul class="antipatrones">
@@ -139,4 +149,28 @@ const antipatrones = [
   }
 
   .antipatrones li::marker { content: '✕ '; color: var(--estado-tension); }
+
+  .pipeline {
+    margin: var(--space-4) 0;
+  }
+
+  .pipeline-svg {
+    display: flex;
+    justify-content: center;
+    padding: var(--space-3);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: color-mix(in srgb, var(--bg-raised) 60%, transparent);
+    overflow-x: auto;
+  }
+
+  .pipeline-svg :global(svg) {
+    max-width: 34rem;
+    height: auto;
+  }
+
+  .pipeline figcaption {
+    margin-top: var(--space-2);
+    color: var(--text-faint);
+  }
 </style>

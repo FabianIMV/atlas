@@ -25,9 +25,19 @@ const { Content } = await render(paper);
       <h1>{paper.data.titulo}</h1>
       <p class="mono autores">{paper.data.autores} · {paper.data.fuente}</p>
       <p class="mono detalle">
-        <a href={paper.data.url} rel="noopener">{t(idioma, 'accion.fuente_original')} ↗</a>
-        · lectura: {paper.data.lectura} ·
-        <time datetime={fechaISO(paper.data.fecha_lectura)}>{fecha(paper.data.fecha_lectura)}</time>
+        {paper.data.url && (
+          <>
+            <a href={paper.data.url} rel="noopener">{t(idioma, 'accion.fuente_original')} ↗</a>
+            {' · '}
+          </>
+        )}
+        lectura: {paper.data.lectura}
+        {paper.data.fecha_lectura && (
+          <>
+            {' · '}
+            <time datetime={fechaISO(paper.data.fecha_lectura)}>{fecha(paper.data.fecha_lectura)}</time>
+          </>
+        )}
       </p>
     </header>
 

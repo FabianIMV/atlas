@@ -1,11 +1,23 @@
 ---
-// Tag de capa (C0–C6) que enlaza al nodo correspondiente del modelo.
+// Tag de capa (C0–C6). Por defecto enlaza al nodo del modelo; con
+// enlace={false} renderiza un span (obligatorio dentro de otros <a>,
+// porque anidar anchors es HTML inválido y rompe el layout de las cards).
 interface Props {
   capa: string;
+  enlace?: boolean;
 }
 
-const { capa } = Astro.props;
+const { capa, enlace = true } = Astro.props;
 const base = import.meta.env.BASE_URL;
+const estilo = `--tag-color: var(--capa-${capa.toLowerCase()})`;
 ---
 
-<a class="tag-capa" style={`--tag-color: var(--capa-${capa.toLowerCase()})`} href={`${base}es/modelo/${capa.toLowerCase()}/`}>{capa}</a>
+{
+  enlace ? (
+    <a class="tag-capa" style={estilo} href={`${base}es/modelo/${capa.toLowerCase()}/`}>
+      {capa}
+    </a>
+  ) : (
+    <span class="tag-capa" style={estilo}>{capa}</span>
+  )
+}

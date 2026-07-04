@@ -4,10 +4,23 @@ import Base from '../../../layouts/Base.astro';
 import BadgeEpistemico from '../../../components/BadgeEpistemico.astro';
 import CapaTag from '../../../components/CapaTag.astro';
 
-const papers = (await getCollection('papers')).sort(
-  (a, b) => b.data.fecha_lectura.valueOf() - a.data.fecha_lectura.valueOf()
-);
+const papers = await getCollection('papers');
 const base = import.meta.env.BASE_URL;
+
+// Secciones en el orden de la Biblioteca inicial (doc 02, Parte III)
+const temas = [
+  'Consciencia en IA',
+  'Neurociencia de la consciencia',
+  'Física / información',
+  'Teorías de consciencia',
+] as const;
+
+const porTema = temas.map((tema) => ({
+  tema,
+  fichas: papers
+    .filter((p) => p.data.tema === tema)
+    .sort((a, b) => a.data.titulo.localeCompare(b.data.titulo, 'es')),
+}));
 ---
 
 <Base
@@ -23,29 +36,30 @@ const base = import.meta.env.BASE_URL;
       secundarias — honestidad de lectura como base de credibilidad.
     </p>
 
-    <ul class="lista-cards">
-      {
-        papers.map((paper) => (
-          <li>
-            <a class="card" href={`${base}es/papers/${paper.id}/`}>
-              <span class="meta">
-                <BadgeEpistemico registro={paper.data.registro} />
-                {paper.data.capas.map((c) => (
-                  <CapaTag capa={c} />
-                ))}
-                <span class="mono fuente">{paper.data.fuente}</span>
-              </span>
-              <h3>{paper.data.titulo}</h3>
-              <p class="insight">{paper.data.key_insight}</p>
-            </a>
-          </li>
-        ))
-      }
-    </ul>
-
-    <p class="mono nota-fase">
-      1 de 13 fichas publicadas — la biblioteca inicial completa se crea en Fase 2.
-    </p>
+    {
+      porTema.map(({ tema, fichas }) => (
+        <section>
+          <h2>{tema}</h2>
+          <ul class="lista-cards">
+            {fichas.map((paper) => (
+              <li>
+                <a class="card" href={`${base}es/papers/${paper.id}/`}>
+                  <span class="meta">
+                    <BadgeEpistemico registro={paper.data.registro} />
+                    {paper.data.capas.map((c) => (
+                      <CapaTag capa={c} enlace={false} />
+                    ))}
+                    <span class="mono fuente">{paper.data.fuente}</span>
+                  </span>
+                  <h3>{paper.data.titulo}</h3>
+                  <p class="insight">{paper.data.key_insight}</p>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))
+    }
   </div>
 </Base>
 
@@ -58,6 +72,4 @@ const base = import.meta.env.BASE_URL;
     font-size: var(--fs-sm);
     font-style: italic;
   }
-
-  .nota-fase { color: var(--text-faint); }
 </style>
