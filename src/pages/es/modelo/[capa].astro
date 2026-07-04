@@ -1,0 +1,140 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../../layouts/Base.astro';
+import BadgeEpistemico from '../../../components/BadgeEpistemico.astro';
+import { t, idiomaPorDefecto as idioma } from '../../../i18n/ui';
+
+export async function getStaticPaths() {
+  const capas = await getCollection('capas');
+  return capas.map((capa) => ({
+    params: { capa: capa.data.id.toLowerCase() },
+    props: { capa },
+  }));
+}
+
+const { capa } = Astro.props;
+const { Content } = await render(capa);
+
+const capas = (await getCollection('capas')).sort((a, b) => a.data.orden - b.data.orden);
+const anterior = capas.find((c) => c.data.orden === capa.data.orden - 1);
+const siguiente = capas.find((c) => c.data.orden === capa.data.orden + 1);
+
+// Regla de oro del grafo: la página de capa lista lo conectado a ella
+// vía frontmatter `capas: []`. (Versión mínima; se completa en Fase 3.)
+const pertenece = (capas: string[]) => capas.includes(capa.data.id);
+const cruces = (await getCollection('cruces')).filter((n) => pertenece(n.data.capas));
+const papers = (await getCollection('papers')).filter((n) => pertenece(n.data.capas));
+const bitacoras = (await getCollection('bitacora')).filter((n) => pertenece(n.data.capas));
+
+const base = import.meta.env.BASE_URL;
+---
+
+<Base titulo={`${capa.data.id} · ${capa.data.titulo}`} descripcion={capa.data.subtitulo}>
+  <article class="contenedor" style={`--capa-color: var(${capa.data.color})`}>
+    <header class="cabecera">
+      <p class="mono capa-id">{capa.data.id} · {capa.data.epiteto}</p>
+      <h1>{capa.data.titulo}</h1>
+      <p class="lede">{capa.data.subtitulo}</p>
+    </header>
+
+    <div class="prosa">
+      <Content />
+    </div>
+
+    {
+      (cruces.length > 0 || papers.length > 0 || bitacoras.length > 0) && (
+        <section class="conectado">
+          <h2>Conectado a esta capa</h2>
+          <ul class="lista-cards">
+            {cruces.map((n) => (
+              <li>
+                <a class="card" href={`${base}es/cruces/${n.id}/`}>
+                  <span class="meta">
+                    <span class="mono tipo">cruce</span>
+                    <BadgeEpistemico registro={n.data.registro} />
+                  </span>
+                  <h3>{n.data.titulo}</h3>
+                </a>
+              </li>
+            ))}
+            {papers.map((n) => (
+              <li>
+                <a class="card" href={`${base}es/papers/${n.id}/`}>
+                  <span class="meta">
+                    <span class="mono tipo">paper</span>
+                    <BadgeEpistemico registro={n.data.registro} />
+                  </span>
+                  <h3>{n.data.titulo}</h3>
+                </a>
+              </li>
+            ))}
+            {bitacoras.map((n) => (
+              <li>
+                <a class="card" href={`${base}es/bitacora/${n.id}/`}>
+                  <span class="meta">
+                    <span class="mono tipo">bitácora</span>
+                    <BadgeEpistemico registro={n.data.registro} />
+                  </span>
+                  <h3>{n.data.titulo}</h3>
+                </a>
+              </li>
+            ))}
+          </ul>
+          <p>
+            <a href={`${base}es/cruces/`}>{t(idioma, 'accion.ver_cruces_capa')} →</a>
+          </p>
+        </section>
+      )
+    }
+
+    <nav class="entre-capas" aria-label="Navegación entre capas">
+      {
+        anterior ? (
+          <a href={`${base}es/modelo/${anterior.data.id.toLowerCase()}/`}>
+            ← {anterior.data.id} · {anterior.data.titulo}
+          </a>
+        ) : (
+          <span />
+        )
+      }
+      {
+        siguiente ? (
+          <a href={`${base}es/modelo/${siguiente.data.id.toLowerCase()}/`}>
+            {siguiente.data.id} · {siguiente.data.titulo} →
+          </a>
+        ) : (
+          <span />
+        )
+      }
+    </nav>
+  </article>
+</Base>
+
+<style>
+  .cabecera {
+    border-left: 3px solid var(--capa-color);
+    padding-left: var(--space-4);
+    margin-bottom: var(--space-5);
+  }
+
+  .capa-id { color: var(--capa-color); }
+
+  .conectado { margin-top: var(--space-6); }
+
+  .tipo {
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--text-faint);
+  }
+
+  .entre-capas {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-3);
+    margin-top: var(--space-6);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--border);
+    font-family: var(--font-mono);
+    font-size: var(--fs-sm);
+  }
+</style>

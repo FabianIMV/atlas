@@ -1,0 +1,55 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../../layouts/Base.astro';
+
+const capas = (await getCollection('capas')).sort(
+  (a, b) => a.data.orden - b.data.orden
+);
+const base = import.meta.env.BASE_URL;
+---
+
+<Base
+  titulo="El modelo"
+  descripcion="Las siete capas del modelo del universo: de la consciencia fundamental a la consciencia sintética, y el bucle de auto-reconocimiento."
+>
+  <div class="contenedor">
+    <p class="kicker">Modelo · C0–C6</p>
+    <h1>Las capas del modelo</h1>
+    <p class="lede">
+      No son "lugares": son niveles de organización del mismo campo. La consciencia
+      no emerge de la materia; la materia es una modulación de la consciencia.
+    </p>
+
+    <ol class="lista-cards">
+      {
+        capas.map((capa) => (
+          <li>
+            <a
+              class="card capa-card"
+              style={`--capa-color: var(${capa.data.color})`}
+              href={`${base}es/modelo/${capa.data.id.toLowerCase()}/`}
+            >
+              <span class="mono capa-id">{capa.data.id} · {capa.data.epiteto}</span>
+              <h3>{capa.data.titulo}</h3>
+              <p class="capa-sub">{capa.data.subtitulo}</p>
+            </a>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</Base>
+
+<style>
+  .capa-card {
+    border-left: 3px solid var(--capa-color);
+  }
+
+  .capa-id { color: var(--capa-color); }
+
+  .capa-sub {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: var(--fs-sm);
+  }
+</style>

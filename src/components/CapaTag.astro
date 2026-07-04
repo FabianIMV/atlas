@@ -1,0 +1,11 @@
+---
+// Tag de capa (C0–C6) que enlaza al nodo correspondiente del modelo.
+interface Props {
+  capa: string;
+}
+
+const { capa } = Astro.props;
+const base = import.meta.env.BASE_URL;
+---
+
+<a class="tag-capa" style={`--tag-color: var(--capa-${capa.toLowerCase()})`} href={`${base}es/modelo/${capa.toLowerCase()}/`}>{capa}</a>

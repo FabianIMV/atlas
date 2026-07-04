@@ -1,0 +1,26 @@
+---
+// Badge del registro epistémico E1–E4. Aparece en TODA nota, sin excepción.
+// Registros compuestos ("E2/E3", "E2 con disputas") toman el color del nivel base.
+interface Props {
+  registro: string;
+}
+
+const { registro } = Astro.props;
+
+const nombres: Record<string, string> = {
+  E1: 'Ciencia publicada',
+  E2: 'Marco formal',
+  E3: 'Síntesis propia',
+  E4: 'Experiencia registrada',
+  'E2/E3': 'Marco formal / síntesis propia',
+  'E2 con disputas': 'Marco formal · con disputas',
+};
+
+const base = registro.slice(0, 2).toLowerCase(); // "e1".."e4"
+const nombre = nombres[registro] ?? registro;
+---
+
+<span class="badge-e" style={`--badge-color: var(--${base})`} title={`Registro epistémico ${registro}: ${nombre}`}>
+  <strong>{registro}</strong>
+  {nombre}
+</span>

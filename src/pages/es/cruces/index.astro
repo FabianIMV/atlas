@@ -1,0 +1,75 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../../layouts/Base.astro';
+import BadgeEpistemico from '../../../components/BadgeEpistemico.astro';
+import CapaTag from '../../../components/CapaTag.astro';
+
+const cruces = (await getCollection('cruces')).sort(
+  (a, b) => b.data.fecha.valueOf() - a.data.fecha.valueOf()
+);
+const base = import.meta.env.BASE_URL;
+
+const estadoVar: Record<string, string> = {
+  convergente: '--estado-convergente',
+  abierto: '--estado-abierto',
+  'tensión': '--estado-tension',
+};
+---
+
+<Base
+  titulo="Cruces"
+  descripcion="Convergencias entre tradiciones contemplativas y ciencia de frontera. Cada cruce declara qué converge, qué no, y qué observación podría discriminar."
+>
+  <div class="contenedor">
+    <p class="kicker">Cruces · tradición ↔ ciencia</p>
+    <h1>Convergencias</h1>
+    <p class="lede">
+      Criterio del atlas: la convergencia de marcos independientes es señal de validez.
+      Cada cruce es registro <strong>E3</strong> — síntesis propia, especulativa por diseño —
+      y declara qué converge exactamente, qué NO converge, y qué observación podría
+      discriminar entre coincidencia estructural e identidad real.
+    </p>
+
+    <!-- TODO Fase 2: renderizar aquí diagrama-2-convergencias.mmd (cabecera visual,
+         con etiqueta E3 visible; en móvil, cards apiladas por fila) -->
+
+    <ul class="lista-cards">
+      {
+        cruces.map((cruce) => (
+          <li>
+            <a class="card" href={`${base}es/cruces/${cruce.id}/`}>
+              <span class="meta">
+                <BadgeEpistemico registro={cruce.data.registro} />
+                {cruce.data.capas.map((c) => (
+                  <CapaTag capa={c} />
+                ))}
+                <span class="estado" style={`--estado-color: var(${estadoVar[cruce.data.estado]})`}>
+                  {cruce.data.estado}
+                </span>
+              </span>
+              <h3>{cruce.data.titulo}</h3>
+              <p class="pareja mono">
+                {cruce.data.tradicion} <span class="union">↔</span> {cruce.data.ciencia}
+              </p>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+
+    <p class="mono nota-fase">
+      1 de 15 cruces publicados — la tabla de convergencias completa se puebla en Fase 2.
+    </p>
+  </div>
+</Base>
+
+<style>
+  .pareja {
+    margin: 0;
+    color: var(--text-muted);
+  }
+
+  .union { color: var(--text-faint); }
+
+  .nota-fase { color: var(--text-faint); }
+</style>

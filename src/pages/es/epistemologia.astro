@@ -1,0 +1,142 @@
+---
+import Base from '../../layouts/Base.astro';
+import BadgeEpistemico from '../../components/BadgeEpistemico.astro';
+
+const registros = [
+  {
+    id: 'E1',
+    nombre: 'Ciencia publicada',
+    texto:
+      'Peer-review o arXiv con tracción. Puede estar equivocada, pero es auditable.',
+  },
+  {
+    id: 'E2',
+    nombre: 'Marco formal',
+    texto:
+      'Sistemas internos coherentes con siglos de refinamiento (Vedanta, Shivaísmo de Cachemira, Hermetismo de Bardon) o teorías científicas minoritarias/disputadas (IIT en sus claims fuertes, Orch-OR, campos mórficos). Se evalúan por coherencia interna y frutos, no por consenso.',
+  },
+  {
+    id: 'E3',
+    nombre: 'Síntesis propia',
+    texto:
+      'Los cruces e hipótesis del autor. Especulativos por diseño y con orgullo: aquí vive la originalidad del atlas, etiquetada como lo que es.',
+  },
+  {
+    id: 'E4',
+    nombre: 'Experiencia registrada',
+    texto:
+      'Bitácora personal con estructura trigger → contenido → verificación. La experiencia en primera persona es dato; su interpretación es hipótesis.',
+  },
+];
+
+const criterios = [
+  {
+    nombre: 'Frutos',
+    texto: '¿La idea produce resultados observables en la vida y el trabajo?',
+  },
+  {
+    nombre: 'Convergencia independiente',
+    texto: '¿Marcos que no se conocen entre sí llegan al mismo patrón?',
+  },
+  {
+    nombre: 'Falsabilidad donde aplique',
+    texto:
+      '¿Qué observación debilitaría esta idea? Toda ficha E3 debe responder esto.',
+  },
+  {
+    nombre: 'Integración sobre acumulación',
+    texto:
+      'Una idea entra al atlas solo si se conecta a capas existentes; si no conecta, espera en cuarentena.',
+  },
+];
+
+const antipatrones = [
+  'Citar mecánica cuántica como comodín místico.',
+  'Presentar homologías estructurales como identidades probadas.',
+  'Acumular sin integrar.',
+  'Apelar a autoridad — incluida la IA: este atlas usa IA como brújula, no como oráculo de verdad.',
+];
+---
+
+<Base
+  titulo="Epistemología"
+  descripcion="El sistema de registro E1–E4 y los criterios de validación del atlas: frutos, convergencia independiente, falsabilidad e integración."
+>
+  <div class="contenedor">
+    <p class="kicker">Epistemología · E1–E4</p>
+    <h1>Cómo sabe este atlas lo que dice saber</h1>
+    <p class="lede">
+      El atlas cruza dominios con estatus de evidencia radicalmente distinto.
+      Su valor depende de no aplanarlos. Cada pieza de contenido lleva un badge
+      visible con su registro — esto es lo que separa al atlas de un sitio
+      esotérico genérico: <strong>honestidad epistémica como identidad visual</strong>.
+    </p>
+
+    <h2>Los cuatro registros</h2>
+    <dl class="registros">
+      {
+        registros.map((r) => (
+          <div class="registro reveal">
+            <dt>
+              <BadgeEpistemico registro={r.id} />
+            </dt>
+            <dd>{r.texto}</dd>
+          </div>
+        ))
+      }
+    </dl>
+
+    <h2>Criterios de promoción y descarte</h2>
+    <ol class="criterios">
+      {
+        criterios.map((c) => (
+          <li>
+            <strong>{c.nombre}.</strong> {c.texto}
+          </li>
+        ))
+      }
+    </ol>
+
+    <h2>El pipeline de una idea</h2>
+    <p>
+      Toda idea recorre el mismo camino: registro (trigger → contenido → verificación),
+      cruce con fuentes E1/E2, prueba de convergencia entre marcos independientes,
+      prueba de frutos observables — y dos salidas honestas: <strong>cuarentena</strong>
+      (integración sobre acumulación) o <strong>bitácora en observación</strong>.
+      Toda ficha integrada exige condición de falsación explícita.
+    </p>
+    <!-- TODO Fase 2: renderizar aquí diagrama-3-epistemologia.mmd (pipeline completo, build-time) -->
+
+    <h2>Anti-patrones que el atlas evita</h2>
+    <ul class="antipatrones">
+      {antipatrones.map((a) => <li>{a}</li>)}
+    </ul>
+  </div>
+</Base>
+
+<style>
+  .registros {
+    margin: 0;
+    display: grid;
+    gap: var(--space-3);
+  }
+
+  .registro {
+    padding: var(--space-3) var(--space-4);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: color-mix(in srgb, var(--bg-raised) 72%, transparent);
+  }
+
+  .registro dt { margin-bottom: var(--space-2); }
+  .registro dd { margin: 0; color: var(--text-muted); }
+
+  .criterios li { margin-block: var(--space-2); }
+
+  .antipatrones li {
+    margin-block: var(--space-2);
+    color: var(--text-muted);
+  }
+
+  .antipatrones li::marker { content: '✕ '; color: var(--estado-tension); }
+</style>
