@@ -1,0 +1,104 @@
+---
+import { t, idiomaPorDefecto as idioma } from '../i18n/ui';
+
+const base = import.meta.env.BASE_URL;
+const es = `${base}es/`;
+
+const enlaces = [
+  { href: es, etiqueta: t(idioma, 'nav.mapa') },
+  { href: `${es}modelo/`, etiqueta: t(idioma, 'nav.modelo') },
+  { href: `${es}cruces/`, etiqueta: t(idioma, 'nav.cruces') },
+  { href: `${es}papers/`, etiqueta: t(idioma, 'nav.papers') },
+  { href: `${es}bitacora/`, etiqueta: t(idioma, 'nav.bitacora') },
+  { href: `${es}epistemologia/`, etiqueta: t(idioma, 'nav.epistemologia') },
+  { href: `${es}glosario/`, etiqueta: t(idioma, 'nav.glosario') },
+  { href: `${es}acerca/`, etiqueta: t(idioma, 'nav.acerca') },
+];
+
+const rutaActual = Astro.url.pathname;
+---
+
+<header>
+  <div class="contenedor--ancho barra">
+    <a class="marca" href={es}>{t(idioma, 'sitio.nombre')}</a>
+    <nav aria-label="Navegación principal">
+      <ul>
+        {
+          enlaces.map(({ href, etiqueta }) => (
+            <li>
+              <a href={href} aria-current={rutaActual === href ? 'page' : undefined}>
+                {etiqueta}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<style>
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .barra {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    padding-block: var(--space-3) var(--space-2);
+  }
+
+  .marca {
+    font-family: var(--font-display);
+    font-size: var(--fs-lg);
+    font-weight: 600;
+    color: var(--text);
+    text-decoration: none;
+    letter-spacing: -0.01em;
+  }
+
+  nav ul {
+    display: flex;
+    gap: var(--space-3);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  nav ul::-webkit-scrollbar { display: none; }
+
+  nav a {
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    text-decoration: none;
+    white-space: nowrap;
+    padding-block: var(--space-1);
+  }
+
+  nav a:hover { color: var(--text); }
+
+  nav a[aria-current='page'] {
+    color: var(--calido);
+    border-bottom: 1px solid var(--calido);
+  }
+
+  @media (min-width: 760px) {
+    .barra {
+      flex-direction: row;
+      align-items: baseline;
+      justify-content: space-between;
+    }
+  }
+</style>

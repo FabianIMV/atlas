@@ -1,0 +1,11 @@
+flowchart TD
+    A["IDEA · EXPERIENCIA · LECTURA<br/>materia prima del atlas"] --> B["REGISTRO<br/>trigger - contenido - verificación"]
+    B --> C{"¿Cruza con fuentes<br/>E1 ciencia o E2 marco formal?"}
+    C -->|"sí"| D{"¿Convergencia entre<br/>marcos independientes?"}
+    C -->|"no"| Q["CUARENTENA<br/>espera sin integrarse<br/>· integración sobre acumulación ·"]
+    D -->|"sí"| E{"¿Frutos<br/>observables?"}
+    D -->|"no"| Q
+    E -->|"sí"| F["INTEGRACIÓN AL ATLAS<br/>ficha etiquetada E1-E4<br/>con condición de falsación explícita"]
+    E -->|"aún no"| G["BITÁCORA E3 / E4<br/>hipótesis en observación"]
+    G -->|"el tiempo entrega frutos"| F
+    Q -->|"aparece nueva evidencia"| C

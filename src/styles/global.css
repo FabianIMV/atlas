@@ -1,0 +1,263 @@
+@import './tokens.css';
+
+/* ============================================================
+   Base · mobile-first · sitio de lectura larga
+   ============================================================ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: var(--fs-base);
+  line-height: var(--lh-body);
+  -webkit-font-smoothing: antialiased;
+  /* Retícula de fondo: trama geométrica casi subliminal (~4% opacidad),
+     referencia a la matriz reticular del modelo */
+  background-image:
+    linear-gradient(rgba(127, 155, 232, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(127, 155, 232, 0.045) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-display);
+  font-weight: 560;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+
+h1 { font-size: var(--fs-3xl); }
+h2 { font-size: var(--fs-xl); margin-block: var(--space-5) var(--space-3); }
+h3 { font-size: var(--fs-lg); font-family: var(--font-body); font-weight: 600; }
+
+p { margin-block: 0 var(--space-3); }
+
+a {
+  color: var(--frio);
+  text-decoration-color: color-mix(in srgb, var(--frio) 40%, transparent);
+  text-underline-offset: 3px;
+}
+
+a:hover { text-decoration-color: var(--frio); }
+
+:focus-visible {
+  outline: 2px solid var(--calido);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+img, svg { max-width: 100%; height: auto; }
+
+hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin-block: var(--space-5);
+}
+
+blockquote {
+  margin: 0 0 var(--space-3);
+  padding-left: var(--space-3);
+  border-left: 2px solid var(--calido-suave);
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+code {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  background: var(--bg-raised);
+  padding: 0.1em 0.35em;
+  border-radius: var(--radius-sm);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fs-sm);
+}
+
+th, td {
+  text-align: left;
+  padding: var(--space-2) var(--space-3);
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+
+th {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+/* ---------- Layout ---------- */
+
+.contenedor {
+  width: min(100% - 2.5rem, var(--medida));
+  margin-inline: auto;
+}
+
+.contenedor--ancho {
+  width: min(100% - 2.5rem, 64rem);
+  margin-inline: auto;
+}
+
+main {
+  padding-block: var(--space-5) var(--space-6);
+  min-height: 70vh;
+}
+
+/* ---------- Utilidades tipográficas ---------- */
+
+.mono {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: 0.06em;
+}
+
+.kicker {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--text-muted);
+  margin-bottom: var(--space-2);
+}
+
+.lede {
+  font-size: var(--fs-lg);
+  color: var(--text-muted);
+  text-wrap: pretty;
+}
+
+/* ---------- Prosa de notas markdown ---------- */
+
+.prosa h2 {
+  font-size: var(--fs-lg);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: var(--space-2);
+}
+
+.prosa ul, .prosa ol { padding-left: 1.4rem; margin-block: 0 var(--space-3); }
+.prosa li { margin-block: var(--space-1); }
+.prosa li::marker { color: var(--text-faint); }
+
+/* ---------- Badges epistémicos E1–E4 ---------- */
+
+.badge-e {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.45em;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: 0.05em;
+  padding: 0.2em 0.6em;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--badge-color) 55%, transparent);
+  background: color-mix(in srgb, var(--badge-color) 10%, transparent);
+  color: var(--badge-color);
+  white-space: nowrap;
+}
+
+.badge-e strong { font-weight: 700; }
+
+/* ---------- Tags de capa ---------- */
+
+.tag-capa {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: 0.05em;
+  padding: 0.15em 0.55em;
+  border-radius: var(--radius-sm);
+  border: 1px solid color-mix(in srgb, var(--tag-color) 45%, transparent);
+  color: var(--tag-color);
+  text-decoration: none;
+}
+
+.tag-capa:hover {
+  background: color-mix(in srgb, var(--tag-color) 12%, transparent);
+}
+
+/* ---------- Estado de cruce ---------- */
+
+.estado {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--estado-color, var(--text-muted));
+}
+
+.estado::before {
+  content: '● ';
+  font-size: 0.8em;
+}
+
+/* ---------- Cards de listado ---------- */
+
+.card {
+  display: block;
+  padding: var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: color-mix(in srgb, var(--bg-raised) 72%, transparent);
+  text-decoration: none;
+  color: var(--text);
+  transition: border-color 0.25s var(--ease-out), transform 0.25s var(--ease-out);
+}
+
+.card:hover {
+  border-color: var(--border-strong);
+  transform: translateY(-2px);
+}
+
+.card h3 {
+  margin: var(--space-2) 0;
+  font-family: var(--font-display);
+  font-weight: 540;
+}
+
+.card .meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  align-items: center;
+}
+
+.lista-cards {
+  display: grid;
+  gap: var(--space-3);
+  padding: 0;
+  margin: var(--space-4) 0;
+  list-style: none;
+}
+
+/* ---------- Reveals al scroll (mejora progresiva: sin JS todo es visible) ---------- */
+
+.reveal { opacity: 1; }
+
+/* ---------- Reduced motion ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

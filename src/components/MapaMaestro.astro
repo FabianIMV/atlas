@@ -1,0 +1,298 @@
+---
+// EL MAPA · Diagrama maestro del modelo C0→C6 + bucle de retorno.
+// Implementación propia (no Mermaid crudo) según _fundacion/03-DIAGRAMAS.md:
+// nodos clicables que navegan a /modelo/[capa], glow al hover/tap,
+// secuencia de aparición C0→C6 al cargar (CSS puro: funciona sin JS y
+// respeta prefers-reduced-motion). Fuente estructural:
+// public/diagramas/diagrama-1-modelo-universo.mmd
+import { getCollection } from 'astro:content';
+
+const capas = (await getCollection('capas')).sort(
+  (a, b) => a.data.orden - b.data.orden
+);
+
+// Etiquetas de las flechas de descenso (del diagrama 1)
+const descensos = [
+  'pulso creativo',
+  'patrón estable',
+  'potencial estructurado',
+  'decoherencia / colapso',
+  'auto-organización',
+  'diseño y entrenamiento',
+];
+
+const interfaces = [
+  'Meditación',
+  'Sistemas oraculares · Tarot · I Ching · sincronicidad',
+  'Entrenamiento hermético · Bardon',
+  'Registro personal · trigger → contenido → verificación',
+];
+
+const base = import.meta.env.BASE_URL;
+---
+
+<div class="mapa" role="figure" aria-label="El modelo del universo: descenso por capas C0 a C6 y bucle de auto-reconocimiento">
+  <!-- Bucle de retorno C5/C6 ⇒ C0: sin él, esto sería solo emanacionismo -->
+  <div class="retorno" aria-hidden="true">
+    <span class="retorno-flecha">▲</span>
+    <span class="retorno-texto">pratyabhijñā · auto-reconocimiento · C5 y C6 ⇒ C0</span>
+  </div>
+
+  <ol class="capas">
+    {
+      capas.map((capa, i) => (
+        <li style={`--nodo-color: var(${capa.data.color}); --nodo-orden: ${i}`}>
+          <a class="nodo" href={`${base}es/modelo/${capa.data.id.toLowerCase()}/`}>
+            <span class="nodo-id">{capa.data.id}</span>
+            <span class="nodo-titulo">{capa.data.titulo}</span>
+            <span class="nodo-epiteto">{capa.data.epiteto}</span>
+          </a>
+          {i < descensos.length && (
+            <span class="descenso" aria-hidden="true">
+              <span class="descenso-linea" />
+              <span class="descenso-etiqueta">{descensos[i]}</span>
+            </span>
+          )}
+        </li>
+      ))
+    }
+  </ol>
+
+  <aside class="interfaces" style="--nodo-orden: 7">
+    <p class="interfaces-titulo">Interfaces de sintonización</p>
+    <ul>
+      {interfaces.map((nombre) => <li>{nombre}</li>)}
+    </ul>
+    <p class="interfaces-nota">conectan con C5 · sintonizan el filtro hacia capas sutiles (⇢ C1)</p>
+  </aside>
+</div>
+
+<style>
+  .mapa {
+    display: grid;
+    grid-template-columns: 2.2rem 1fr;
+    gap: var(--space-3);
+    margin-block: var(--space-5);
+  }
+
+  /* --- Nodos C0→C6 --- */
+
+  .capas {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .capas li {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .nodo {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-areas: 'id titulo' 'id epiteto';
+    column-gap: var(--space-3);
+    align-items: baseline;
+    padding: var(--space-3) var(--space-4);
+    border: 1px solid color-mix(in srgb, var(--nodo-color) 45%, var(--border));
+    border-radius: var(--radius-lg);
+    background:
+      linear-gradient(
+        135deg,
+        color-mix(in srgb, var(--nodo-color) 8%, var(--bg-raised)),
+        var(--bg-raised)
+      );
+    text-decoration: none;
+    color: var(--text);
+    transition:
+      box-shadow 0.3s var(--ease-out),
+      border-color 0.3s var(--ease-out),
+      transform 0.3s var(--ease-out);
+  }
+
+  .nodo:hover,
+  .nodo:focus-visible {
+    border-color: var(--nodo-color);
+    box-shadow:
+      0 0 24px color-mix(in srgb, var(--nodo-color) 28%, transparent),
+      inset 0 0 18px color-mix(in srgb, var(--nodo-color) 7%, transparent);
+    transform: translateX(3px);
+  }
+
+  .nodo-id {
+    grid-area: id;
+    align-self: center;
+    font-family: var(--font-mono);
+    font-size: var(--fs-sm);
+    font-weight: 700;
+    color: var(--nodo-color);
+    border: 1px solid color-mix(in srgb, var(--nodo-color) 60%, transparent);
+    border-radius: var(--radius-sm);
+    padding: 0.2em 0.45em;
+  }
+
+  .nodo-titulo {
+    grid-area: titulo;
+    font-family: var(--font-display);
+    font-size: var(--fs-lg);
+    font-weight: 580;
+    letter-spacing: -0.01em;
+  }
+
+  .nodo-epiteto {
+    grid-area: epiteto;
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    letter-spacing: 0.04em;
+    color: var(--text-muted);
+    margin-top: 0.2rem;
+  }
+
+  /* --- Flechas de descenso --- */
+
+  .descenso {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding-left: var(--space-4);
+    min-height: 2.4rem;
+  }
+
+  .descenso-linea {
+    width: 1px;
+    align-self: stretch;
+    background: linear-gradient(var(--border-strong), var(--border));
+    position: relative;
+  }
+
+  .descenso-linea::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: -3px;
+    border-left: 3.5px solid transparent;
+    border-right: 3.5px solid transparent;
+    border-top: 5px solid var(--border-strong);
+  }
+
+  .descenso-etiqueta {
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    letter-spacing: 0.06em;
+    color: var(--text-faint);
+  }
+
+  /* --- Bucle de retorno (rail izquierdo) --- */
+
+  .retorno {
+    grid-row: 1 / span 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-left: 1.5px solid color-mix(in srgb, var(--calido) 55%, transparent);
+    border-top: 1.5px solid color-mix(in srgb, var(--calido) 55%, transparent);
+    border-bottom: 1.5px solid color-mix(in srgb, var(--calido) 55%, transparent);
+    border-radius: var(--radius) 0 0 var(--radius);
+    margin-block: 1.6rem;
+    width: 1.1rem;
+    justify-self: end;
+  }
+
+  .retorno-flecha {
+    color: var(--calido);
+    font-size: 0.7rem;
+    line-height: 1;
+    transform: translate(0.5rem, -0.45rem);
+  }
+
+  .retorno-texto {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--calido-suave);
+    margin-block: auto;
+    white-space: nowrap;
+  }
+
+  /* --- Interfaces de sintonización --- */
+
+  .interfaces {
+    grid-column: 2;
+    margin-top: var(--space-3);
+    padding: var(--space-3) var(--space-4);
+    border: 1px dashed color-mix(in srgb, var(--calido) 45%, transparent);
+    border-radius: var(--radius-lg);
+  }
+
+  .interfaces-titulo {
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--calido);
+    margin: 0 0 var(--space-2);
+  }
+
+  .interfaces ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-3);
+  }
+
+  .interfaces li {
+    font-size: var(--fs-sm);
+    color: var(--text-muted);
+  }
+
+  .interfaces li::before {
+    content: '◆ ';
+    color: var(--calido-suave);
+    font-size: 0.7em;
+  }
+
+  .interfaces-nota {
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    color: var(--text-faint);
+    margin: var(--space-2) 0 0;
+  }
+
+  /* --- La retícula despierta: secuencia de aparición C0→C6 ---
+     CSS puro. Con prefers-reduced-motion los nodos aparecen sin animar
+     (regla global en global.css anula duración). */
+
+  @keyframes despertar {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .capas li,
+  .interfaces {
+    animation: despertar 0.7s var(--ease-out) both;
+    animation-delay: calc(var(--nodo-orden) * 0.14s);
+  }
+
+  .retorno {
+    animation: despertar 0.9s var(--ease-out) both;
+    animation-delay: 1.25s;
+  }
+
+  @media (min-width: 760px) {
+    .mapa {
+      grid-template-columns: 3.5rem 1fr;
+    }
+  }
+</style>
