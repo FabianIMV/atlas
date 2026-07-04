@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import Base from '../../../layouts/Base.astro';
 import BadgeEpistemico from '../../../components/BadgeEpistemico.astro';
 import CapaTag from '../../../components/CapaTag.astro';
+import DiagramaConvergencias from '../../../components/DiagramaConvergencias.astro';
 
 const cruces = (await getCollection('cruces')).sort(
   (a, b) => b.data.fecha.valueOf() - a.data.fecha.valueOf()
@@ -30,9 +31,9 @@ const estadoVar: Record<string, string> = {
       discriminar entre coincidencia estructural e identidad real.
     </p>
 
-    <!-- TODO Fase 2: renderizar aquí diagrama-2-convergencias.mmd (cabecera visual,
-         con etiqueta E3 visible; en móvil, cards apiladas por fila) -->
+    <DiagramaConvergencias />
 
+    <h2>Todas las fichas</h2>
     <ul class="lista-cards">
       {
         cruces.map((cruce) => (
@@ -41,7 +42,7 @@ const estadoVar: Record<string, string> = {
               <span class="meta">
                 <BadgeEpistemico registro={cruce.data.registro} />
                 {cruce.data.capas.map((c) => (
-                  <CapaTag capa={c} />
+                  <CapaTag capa={c} enlace={false} />
                 ))}
                 <span class="estado" style={`--estado-color: var(${estadoVar[cruce.data.estado]})`}>
                   {cruce.data.estado}
@@ -56,10 +57,6 @@ const estadoVar: Record<string, string> = {
         ))
       }
     </ul>
-
-    <p class="mono nota-fase">
-      1 de 15 cruces publicados — la tabla de convergencias completa se puebla en Fase 2.
-    </p>
   </div>
 </Base>
 
@@ -70,6 +67,4 @@ const estadoVar: Record<string, string> = {
   }
 
   .union { color: var(--text-faint); }
-
-  .nota-fase { color: var(--text-faint); }
 </style>

@@ -1,0 +1,203 @@
+---
+// Diagrama 2 · Convergencias Tradición ↔ Ciencia.
+// Implementación propia responsive según _fundacion/03-DIAGRAMAS.md:
+// en desktop, tres columnas (tradición · patrón convergente · ciencia);
+// en móvil, cards apiladas por fila (tradición arriba, patrón al medio,
+// ciencia abajo). El color codifica el registro: cálido = tradición,
+// frío = ciencia, neutro = patrón. Etiqueta E3 visible por requisito
+// del doc 03. Fuente estructural: public/diagramas/diagrama-2-convergencias.mmd
+import BadgeEpistemico from './BadgeEpistemico.astro';
+
+const base = import.meta.env.BASE_URL;
+
+const filas = [
+  {
+    tradicion: ['Brahman', 'Advaita Vedanta'],
+    patron: 'Campo unificado previo a las cosas',
+    ciencia: ['Orden implicado', 'Bohm'],
+    slug: 'brahman-orden-implicado',
+  },
+  {
+    tradicion: ['Spanda', 'Shivaísmo de Cachemira'],
+    patron: 'Realidad como vibración',
+    ciencia: ['Campos cuánticos', 'QFT'],
+    slug: 'spanda-oscilacion-campos',
+  },
+  {
+    tradicion: ['Collar de Indra', 'Avataṃsaka Sūtra'],
+    patron: 'Interconexión no-local',
+    ciencia: ['Entrelazamiento', 'cuántico'],
+    slug: 'collar-de-indra-entrelazamiento',
+  },
+  {
+    tradicion: ['Māyā', 'el velo'],
+    patron: 'Pérdida de acceso al nivel profundo',
+    ciencia: ['Decoherencia', ''],
+    slug: 'maya-decoherencia',
+  },
+  {
+    tradicion: ['Ākāśa', 'registro universal'],
+    patron: 'Conservación de la información',
+    ciencia: ['Principio holográfico', "'t Hooft · Susskind"],
+    slug: 'akasa-principio-holografico',
+  },
+  {
+    tradicion: ['Kośas', 'envolturas'],
+    patron: 'Niveles de integración',
+    ciencia: ['Información integrada', 'IIT · Φ'],
+    slug: 'kosas-informacion-integrada',
+  },
+  {
+    tradicion: ['Como es arriba es abajo', 'Hermetismo'],
+    patron: 'Auto-similaridad entre escalas',
+    ciencia: ['Fractalidad', 'holografía'],
+    slug: 'como-es-arriba-es-abajo-fractalidad',
+  },
+];
+---
+
+<figure class="diagrama">
+  <figcaption class="cabecera">
+    <span class="mono titulo-diagrama">Convergencias tradición ↔ ciencia</span>
+    <BadgeEpistemico registro="E3" />
+  </figcaption>
+
+  <div class="encabezados" aria-hidden="true">
+    <span class="col-titulo calido">Tradiciones contemplativas</span>
+    <span class="col-titulo neutro">Patrón convergente</span>
+    <span class="col-titulo frio">Ciencia de frontera</span>
+  </div>
+
+  <ol class="filas">
+    {
+      filas.map((fila) => (
+        <li>
+          <a class="fila" href={`${base}es/cruces/${fila.slug}/`}>
+            <span class="celda tradicion">
+              <strong>{fila.tradicion[0]}</strong>
+              {fila.tradicion[1] && <small>{fila.tradicion[1]}</small>}
+            </span>
+            <span class="celda patron">{fila.patron}</span>
+            <span class="celda ciencia">
+              <strong>{fila.ciencia[0]}</strong>
+              {fila.ciencia[1] && <small>{fila.ciencia[1]}</small>}
+            </span>
+          </a>
+        </li>
+      ))
+    }
+  </ol>
+</figure>
+
+<style>
+  .diagrama {
+    margin: var(--space-5) 0;
+  }
+
+  .cabecera {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin-bottom: var(--space-3);
+  }
+
+  .titulo-diagrama {
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--text-muted);
+  }
+
+  .encabezados {
+    display: none;
+  }
+
+  .col-titulo {
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+  }
+
+  .calido { color: var(--calido); }
+  .neutro { color: var(--text-muted); }
+  .frio { color: var(--frio); }
+
+  .filas {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-3);
+  }
+
+  .fila {
+    display: grid;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    text-decoration: none;
+    color: var(--text);
+    transition: border-color 0.25s var(--ease-out);
+  }
+
+  .fila:hover { border-color: var(--border-strong); }
+
+  .celda {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.15rem;
+    padding: var(--space-2) var(--space-3);
+    font-size: var(--fs-sm);
+    background: var(--bg-raised);
+  }
+
+  .celda small {
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    color: var(--text-faint);
+  }
+
+  /* Móvil: tradición arriba (cálido), patrón al medio (neutro), ciencia abajo (frío) */
+  .tradicion {
+    border-left: 3px solid var(--calido);
+    color: var(--calido-suave);
+  }
+
+  .tradicion strong { color: var(--calido); font-weight: 600; }
+
+  .patron {
+    color: var(--text-muted);
+    font-style: italic;
+    text-align: center;
+    align-items: center;
+  }
+
+  .ciencia {
+    border-left: 3px solid var(--frio);
+  }
+
+  .ciencia strong { color: var(--frio); font-weight: 600; }
+
+  @media (min-width: 760px) {
+    .encabezados {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: var(--space-3);
+      margin-bottom: var(--space-2);
+    }
+
+    .filas { gap: var(--space-2); }
+
+    .fila {
+      grid-template-columns: 1fr 1fr 1fr;
+    }
+
+    .tradicion, .ciencia { border-left: none; }
+    .tradicion { border-top: 2px solid color-mix(in srgb, var(--calido) 55%, transparent); }
+    .patron { border-top: 2px solid var(--border-strong); }
+    .ciencia { border-top: 2px solid color-mix(in srgb, var(--frio) 55%, transparent); }
+  }
+</style>
