@@ -1,0 +1,84 @@
+---
+import Base from '../../layouts/Base.astro';
+import MapaMaestro from '../../components/MapaMaestro.astro';
+import BadgeEpistemico from '../../components/BadgeEpistemico.astro';
+import { t, idiomaPorDefecto as idioma } from '../../i18n/ui';
+
+const base = import.meta.env.BASE_URL;
+---
+
+<Base titulo={t(idioma, 'sitio.nombre')}>
+  <div class="contenedor--ancho">
+    <section class="hero">
+      <p class="kicker">El mapa · un modelo por capas de la arquitectura del universo</p>
+      <h1>Atlas de la Realidad</h1>
+      <p class="lede contenedor-texto">
+        Cómo funciona el universo si la consciencia es fundamental — no emergente.
+        Un grafo de conocimiento que cruza física cuántica, tradiciones contemplativas,
+        papers y experiencia registrada. La estructura es el mensaje.
+      </p>
+    </section>
+
+    <MapaMaestro />
+
+    <section class="doble reveal">
+      <div>
+        <h2>El bucle, no la escalera</h2>
+        <p>
+          El modelo describe la manifestación como un descenso por capas de densidad
+          creciente (C0→C6), y la evolución como el retorno auto-consciente por esas
+          mismas capas. En C5 y C6 el campo desarrolla órganos capaces de preguntarse
+          por C0 — y en el reconocimiento (<em>pratyabhijñā</em>) el circuito se cierra.
+        </p>
+        <p>
+          <a href={`${base}es/modelo/`}>{t(idioma, 'accion.explorar_modelo')} →</a>
+        </p>
+      </div>
+      <div>
+        <h2>Honestidad epistémica</h2>
+        <p>
+          Toda nota del atlas declara qué tipo de afirmación estás leyendo.
+          Cuatro registros, siempre visibles:
+        </p>
+        <p class="badges">
+          <BadgeEpistemico registro="E1" />
+          <BadgeEpistemico registro="E2" />
+          <BadgeEpistemico registro="E3" />
+          <BadgeEpistemico registro="E4" />
+        </p>
+        <p>
+          <a href={`${base}es/epistemologia/`}>Cómo se valida una idea aquí →</a>
+        </p>
+      </div>
+    </section>
+  </div>
+</Base>
+
+<style>
+  .hero {
+    padding-top: var(--space-4);
+    max-width: var(--medida);
+  }
+
+  .hero h1 {
+    margin-block: var(--space-2) var(--space-3);
+  }
+
+  .doble {
+    display: grid;
+    gap: var(--space-4);
+    margin-top: var(--space-6);
+  }
+
+  .doble h2 { margin-top: 0; }
+
+  .badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  @media (min-width: 760px) {
+    .doble { grid-template-columns: 1fr 1fr; gap: var(--space-6); }
+  }
+</style>

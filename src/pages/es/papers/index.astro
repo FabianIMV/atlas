@@ -1,0 +1,63 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../../layouts/Base.astro';
+import BadgeEpistemico from '../../../components/BadgeEpistemico.astro';
+import CapaTag from '../../../components/CapaTag.astro';
+
+const papers = (await getCollection('papers')).sort(
+  (a, b) => b.data.fecha_lectura.valueOf() - a.data.fecha_lectura.valueOf()
+);
+const base = import.meta.env.BASE_URL;
+---
+
+<Base
+  titulo="Papers"
+  descripcion="Biblioteca de papers: arXiv y literatura peer-reviewed, con cita, key insight y conexión al modelo."
+>
+  <div class="contenedor">
+    <p class="kicker">Papers · biblioteca</p>
+    <h1>Biblioteca</h1>
+    <p class="lede">
+      Fichas de lectura: cita, key insight en una frase, y conexión explícita al modelo.
+      Cada ficha declara si el autor leyó el paper completo o solo abstract y fuentes
+      secundarias — honestidad de lectura como base de credibilidad.
+    </p>
+
+    <ul class="lista-cards">
+      {
+        papers.map((paper) => (
+          <li>
+            <a class="card" href={`${base}es/papers/${paper.id}/`}>
+              <span class="meta">
+                <BadgeEpistemico registro={paper.data.registro} />
+                {paper.data.capas.map((c) => (
+                  <CapaTag capa={c} />
+                ))}
+                <span class="mono fuente">{paper.data.fuente}</span>
+              </span>
+              <h3>{paper.data.titulo}</h3>
+              <p class="insight">{paper.data.key_insight}</p>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+
+    <p class="mono nota-fase">
+      1 de 13 fichas publicadas — la biblioteca inicial completa se crea en Fase 2.
+    </p>
+  </div>
+</Base>
+
+<style>
+  .fuente { color: var(--frio); }
+
+  .insight {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: var(--fs-sm);
+    font-style: italic;
+  }
+
+  .nota-fase { color: var(--text-faint); }
+</style>

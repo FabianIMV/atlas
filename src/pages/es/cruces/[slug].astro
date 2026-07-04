@@ -1,0 +1,65 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../../layouts/Base.astro';
+import BadgeEpistemico from '../../../components/BadgeEpistemico.astro';
+import CapaTag from '../../../components/CapaTag.astro';
+import { fecha, fechaISO } from '../../../utils/fecha';
+
+export async function getStaticPaths() {
+  const cruces = await getCollection('cruces');
+  return cruces.map((cruce) => ({ params: { slug: cruce.id }, props: { cruce } }));
+}
+
+const { cruce } = Astro.props;
+const { Content } = await render(cruce);
+
+const estadoVar: Record<string, string> = {
+  convergente: '--estado-convergente',
+  abierto: '--estado-abierto',
+  'tensión': '--estado-tension',
+};
+---
+
+<Base titulo={cruce.data.titulo} descripcion={`${cruce.data.tradicion} ↔ ${cruce.data.ciencia}`}>
+  <article class="contenedor">
+    <header class="cabecera">
+      <p class="meta">
+        <BadgeEpistemico registro={cruce.data.registro} />
+        {cruce.data.capas.map((c) => <CapaTag capa={c} />)}
+        <span class="estado" style={`--estado-color: var(${estadoVar[cruce.data.estado]})`}>
+          {cruce.data.estado}
+        </span>
+      </p>
+      <h1>{cruce.data.titulo}</h1>
+      <p class="pareja mono">
+        {cruce.data.tradicion} <span class="union">↔</span> {cruce.data.ciencia}
+      </p>
+      <p class="mono fecha">
+        <time datetime={fechaISO(cruce.data.fecha)}>{fecha(cruce.data.fecha)}</time>
+      </p>
+    </header>
+
+    <div class="prosa">
+      <Content />
+    </div>
+  </article>
+</Base>
+
+<style>
+  .cabecera {
+    margin-bottom: var(--space-5);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: var(--space-4);
+  }
+
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    align-items: center;
+  }
+
+  .pareja { color: var(--text-muted); margin: 0 0 var(--space-2); }
+  .union { color: var(--text-faint); }
+  .fecha { color: var(--text-faint); margin: 0; }
+</style>

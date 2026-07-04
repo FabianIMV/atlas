@@ -1,0 +1,59 @@
+---
+import Base from '../../layouts/Base.astro';
+
+const base = import.meta.env.BASE_URL;
+---
+
+<Base
+  titulo="Acerca"
+  descripcion="Qué es el Atlas de la Realidad, quién lo escribe y cómo se relaciona con consciousnessnetworks.com."
+>
+  <div class="contenedor prosa">
+    <p class="kicker">Acerca · qué es esto</p>
+    <h1>Acerca del atlas</h1>
+
+    <p class="lede">
+      Un atlas navegable de cómo el autor entiende el funcionamiento del universo:
+      un modelo por capas donde la <strong>consciencia es fundamental</strong>, no emergente.
+    </p>
+
+    <p>
+      El modelo se cruza sistemáticamente con física cuántica y computación cuántica,
+      papers de arXiv y literatura peer-reviewed, tradiciones contemplativas
+      (Advaita Vedanta, Shivaísmo de Cachemira, Hermetismo), teorías de campo
+      (Grinberg, Sheldrake, Jung, ZPF, IIT) y experiencia registrada — una bitácora
+      de síntesis y sincronicidades verificadas.
+    </p>
+
+    <p>
+      Esto <strong>no es</strong> un blog cronológico. Es un grafo de conocimiento con
+      entradas interconectadas, donde la estructura es el mensaje. Cumple una doble
+      función: ordenamiento mental del autor — cada idea nueva tiene un lugar
+      estructural donde vivir — y distribución futura, con contenido bilingüe ES/EN
+      para audiencia amplia.
+    </p>
+
+    <p>
+      Toda afirmación del atlas lleva su <a href={`${base}es/epistemologia/`}>registro
+      epistémico E1–E4</a> visible. El autor opera con criterios de falsabilidad,
+      frutos observables y convergencia independiente: el badge hace explícito qué
+      tipo de afirmación estás leyendo.
+    </p>
+
+    <h2>Proyectos hermanos</h2>
+    <p>
+      El atlas es el mapa maestro que ordena y cruza el trabajo publicado en
+      <a href="https://consciousnessnetworks.com" rel="me">consciousnessnetworks.com</a>
+      — el journal público del autor — y las trilogías contemplativas en GitHub Pages.
+    </p>
+
+    <p class="mono firma">Fabián Muñoz · fabianimv</p>
+  </div>
+</Base>
+
+<style>
+  .firma {
+    margin-top: var(--space-5);
+    color: var(--text-faint);
+  }
+</style>

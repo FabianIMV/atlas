@@ -1,0 +1,64 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+
+const terminos = await getCollection('glosario');
+---
+
+<Base
+  titulo="Glosario"
+  descripcion="Términos sánscritos, técnicos y propios del atlas. Los términos sánscritos no se traducen."
+>
+  <div class="contenedor">
+    <p class="kicker">Glosario · términos</p>
+    <h1>Glosario</h1>
+    <p class="lede">
+      Términos sánscritos, técnicos y propios del modelo. Por diseño, los términos
+      sánscritos y los nombres propios no se traducen — el glosario será bilingüe
+      en Fase 4.
+    </p>
+
+    <div class="tabla-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Término</th>
+            <th scope="col">Origen</th>
+            <th scope="col">EN</th>
+            <th scope="col">Nota</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            terminos.map((t) => (
+              <tr id={t.data.id}>
+                <td class="termino">{t.data.termino}</td>
+                <td class="mono origen">{t.data.origen}</td>
+                <td class="en">{t.data.en}</td>
+                <td class="nota">{t.data.nota ?? '—'}</td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</Base>
+
+<style>
+  .tabla-scroll {
+    overflow-x: auto;
+    margin-top: var(--space-4);
+  }
+
+  .termino {
+    font-family: var(--font-display);
+    font-size: var(--fs-base);
+    color: var(--calido-suave);
+    white-space: nowrap;
+  }
+
+  .origen { color: var(--text-muted); }
+  .en { font-style: italic; }
+  .nota { color: var(--text-muted); }
+</style>
